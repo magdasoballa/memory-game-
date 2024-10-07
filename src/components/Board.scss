@@ -1,0 +1,44 @@
+.board {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+    max-width: 600px;
+    max-height: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    justify-content: center;
+    &.game-over {
+        animation: shake 0.5s ease-in-out forwards;
+    }
+
+    @media (max-width: 768px) {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 90vw;
+        max-height: 90vh;
+    }
+    @media (max-width: 480px) {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 90vw;
+        max-height: 90vh;
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(0);
+    }
+    25% {
+        transform: translate(-5px);
+    }
+    50% {
+        transform: translate(5px);
+    }
+    75% {
+        transform: translate(-5px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
