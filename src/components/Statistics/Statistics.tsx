@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useGameStore } from '../store/useGameStore';
+import { useGameStore } from '../../store/useGameStore';
 
 const Statistics: React.FC = () => {
     const { attempts, startTime, isGameOver } = useGameStore();
