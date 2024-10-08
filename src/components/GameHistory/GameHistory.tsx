@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { loadGameHistory } from '../../utils/localStorage';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import './GameHistory.scss';
 
 const GameHistory: React.FC = () => {
@@ -20,16 +23,22 @@ const GameHistory: React.FC = () => {
 
     return (
         <div className="game-history">
-            <h2>Game History</h2>
+            <div className="header">
+                <Link to="/" className="back-button">
+                    <FontAwesomeIcon icon={faArrowLeft} />
+                </Link>
+                <h2>Game History</h2>
+            </div>
+
             {history.length === 0 ? (
                 <p>No game history available yet.</p>
             ) : (
                 <ul>
                     {history.map((game, index) => (
                         <li key={index} className="game-history-item">
-                            <p>Date: {new Date(game.date).toLocaleString()}</p>
-                            <p>Attempts: {game.attempts}</p>
-                            <p>Duration: {formatDuration(game.duration)}</p>
+                            <p><b>Date: </b>{new Date(game.date).toLocaleString()}</p>
+                            <p><b>Attempts:</b> {game.attempts}</p>
+                            <p><b>Duration:</b> {formatDuration(game.duration)}</p>
                         </li>
                     ))}
                 </ul>

@@ -11,9 +11,11 @@ import img6 from '@/assets/images/img6.jpeg';
 import img7 from '@/assets/images/img7.jpeg';
 import img8 from '@/assets/images/img8.jpeg';
 import GameSummary from '../GameSummary/GameSummary';
-import GameHistory from '../GameHistory/GameHistory';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Statistics from '../Statistics/Statistics';
+import { useNavigate } from 'react-router-dom';
+import Confetti from 'react-confetti';
+import { loadGameHistory } from '../../utils/localStorage';
 
 const easyTiles = [img1, img2, img3, img4];
 const mediumTiles = [img1, img2, img3, img4, img5, img6];
@@ -23,6 +25,8 @@ const Board: React.FC = () => {
     const { tiles, revealedTiles, matchedPairs, resetGame, revealTile, isGameOver, startGame, setDifficulty } = useGameStore();
     const [selectedDifficulty, setSelectedDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
     const [gameStarted, setGameStarted] = useState(false);
+    const navigate = useNavigate();
+    const gameHistory = loadGameHistory();
 
     const handleDifficultyChange = (level: 'easy' | 'medium' | 'hard') => {
         if (tiles.length > 0 && !isGameOver) return;
@@ -56,30 +60,29 @@ const Board: React.FC = () => {
 
     return (
         <>
-            <div>
-                <div className='button-container'>
-                    <button
-                        onClick={() => handleDifficultyChange('easy')}
-                        className={`small ${selectedDifficulty === 'easy' ? 'selected' : ''}`}
-                        disabled={selectedDifficulty !== 'easy' && tiles.length > 0 && !isGameOver}
-                    >
-                        Easy
-                    </button>
-                    <button
-                        onClick={() => handleDifficultyChange('medium')}
-                        className={`small ${selectedDifficulty === 'medium' ? 'selected' : ''}`}
-                        disabled={selectedDifficulty !== 'medium' && tiles.length > 0 && !isGameOver}
-                    >
-                        Medium
-                    </button>
-                    <button
-                        onClick={() => handleDifficultyChange('hard')}
-                        className={`small ${selectedDifficulty === 'hard' ? 'selected' : ''}`}
-                        disabled={selectedDifficulty !== 'hard' && tiles.length > 0 && !isGameOver}
-                    >
-                        Hard
-                    </button>
-                </div>
+            {isGameOver && <Confetti />}
+            <div className='button-container'>
+                <button
+                    onClick={() => handleDifficultyChange('easy')}
+                    className={`small ${selectedDifficulty === 'easy' ? 'selected' : ''}`}
+                    disabled={selectedDifficulty !== 'easy' && tiles.length > 0 && !isGameOver}
+                >
+                    Easy
+                </button>
+                <button
+                    onClick={() => handleDifficultyChange('medium')}
+                    className={`small ${selectedDifficulty === 'medium' ? 'selected' : ''}`}
+                    disabled={selectedDifficulty !== 'medium' && tiles.length > 0 && !isGameOver}
+                >
+                    Medium
+                </button>
+                <button
+                    onClick={() => handleDifficultyChange('hard')}
+                    className={`small ${selectedDifficulty === 'hard' ? 'selected' : ''}`}
+                    disabled={selectedDifficulty !== 'hard' && tiles.length > 0 && !isGameOver}
+                >
+                    Hard
+                </button>
             </div>
 
             {tiles.length === 0 && (
@@ -109,7 +112,8 @@ const Board: React.FC = () => {
                 ))}
             </div>
             {isGameOver && <GameSummary />}
-            <GameHistory />
+            {!!gameHistory.length && <button onClick={() => navigate('/history')}>Check Game History</button>}
+
         </>
     );
 };
