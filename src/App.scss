@@ -1,6 +1,18 @@
+@import "@/styles/variables";
 .app {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    h1 {
+        font-family: "Montserrat", sans-serif;
+        font-size: 3rem;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 40px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
 }

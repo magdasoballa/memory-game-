@@ -1,3 +1,4 @@
+@import "@/styles/variables";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
 * {
@@ -8,6 +9,54 @@ body {
     font-family: "Roboto", sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
-    color: #333;
+    background-color: $background-color;
+    color: $text-color;
+
+    button {
+        background-color: $light-purple;
+        color: $white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin: 0 10px 10px 0;
+
+        &:hover {
+            background-color: $medium-purple;
+            transform: scale(1.05);
+        }
+
+        &:active {
+            background-color: $dark-purple;
+            transform: scale(0.98);
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 5px $box-shadow-color;
+        }
+
+        &.selected {
+            background-color: $deep-purple;
+        }
+        &:disabled {
+            background-color: #cfcfcf; /* Szary kolor na zablokowany przycisk */
+            color: #999; /* Jasnoszary tekst */
+            transform: none; /* Brak transformacji dla zablokowanego przycisku */
+            opacity: 0.6; /* Ustawienie przezroczystości dla efektu zablokowania */
+        }
+    }
+
+    .small {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+    .large {
+        padding: 15px 30px;
+        font-size: 18px;
+    }
 }

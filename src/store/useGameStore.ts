@@ -10,9 +10,14 @@ interface GameState {
   startTime: number | null;
   timer: number;
   interval: NodeJS.Timeout | null;
+  difficulty: "easy" | "medium" | "hard";
   revealTile: (index: number) => void;
-  resetGame: (shuffledTiles: string[]) => void;
+  resetGame: (
+    shuffledTiles: string[],
+    difficulty: "easy" | "medium" | "hard"
+  ) => void;
   startGame: () => void;
+  setDifficulty: (level: "easy" | "medium" | "hard") => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => {
@@ -25,11 +30,11 @@ export const useGameStore = create<GameState>((set, get) => {
     startTime: null,
     timer: 0,
     interval: null,
+    difficulty: "easy",
 
     revealTile: (index: number) => {
       const { revealedTiles, matchedPairs, tiles, attempts, isGameOver } =
         get();
-
       if (isGameOver) return;
       if (revealedTiles.length === 2) return;
       if (
@@ -52,10 +57,7 @@ export const useGameStore = create<GameState>((set, get) => {
           });
         } else {
           setTimeout(() => {
-            set({
-              revealedTiles: [],
-              attempts: attempts + 1,
-            });
+            set({ revealedTiles: [], attempts: attempts + 1 });
           }, 1000);
         }
       }
@@ -72,10 +74,12 @@ export const useGameStore = create<GameState>((set, get) => {
       }
     },
 
-    resetGame: (shuffledTiles: string[]) => {
+    resetGame: (
+      shuffledTiles: string[],
+      difficulty: "easy" | "medium" | "hard"
+    ) => {
       const currentInterval = get().interval;
       if (currentInterval) clearInterval(currentInterval);
-
       set({
         tiles: shuffledTiles,
         revealedTiles: [],
@@ -85,6 +89,7 @@ export const useGameStore = create<GameState>((set, get) => {
         startTime: null,
         timer: 0,
         interval: null,
+        difficulty,
       });
     },
 
@@ -94,8 +99,11 @@ export const useGameStore = create<GameState>((set, get) => {
         const currentTimer = get().timer;
         set({ timer: currentTimer + 1 });
       }, 1000);
-
       set({ interval: intervalId });
+    },
+
+    setDifficulty: (level: "easy" | "medium" | "hard") => {
+      set({ difficulty: level });
     },
   };
 });
