@@ -1,4 +1,4 @@
-import { useGameStore } from "../../store/useGameStore";
+import { useGameStore } from "@/store/useGameStore";
 
 const GameSummary: React.FC = () => {
     const { attempts, isGameOver, duration } = useGameStore();

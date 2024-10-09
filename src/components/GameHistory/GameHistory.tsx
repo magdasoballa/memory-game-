@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { loadGameHistory } from '../../utils/localStorage';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+
 import './GameHistory.scss';
+
+import { loadGameHistory } from '@/utils/localStorage';
 
 const GameHistory: React.FC = () => {
     const [history, setHistory] = useState<{ attempts: number; duration: number; date: string }[]>([]);

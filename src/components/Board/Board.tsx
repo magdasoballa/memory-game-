@@ -1,7 +1,13 @@
-import Tile from '../Tile/Tile';
-import { useGameStore } from '../../store/useGameStore';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Confetti from 'react-confetti';
+
 import './Board.scss';
-import { shuffleArray } from '../../utils/shuffle';
+
+import { useGameStore } from '@/store/useGameStore';
+import { shuffleArray } from '@/utils/shuffle';
+import { loadGameHistory } from '@/utils/localStorage';
+
 import img1 from '@/assets/images/img1.jpeg';
 import img2 from '@/assets/images/img2.jpeg';
 import img3 from '@/assets/images/img3.jpeg';
@@ -10,12 +16,10 @@ import img5 from '@/assets/images/img5.jpeg';
 import img6 from '@/assets/images/img6.jpeg';
 import img7 from '@/assets/images/img7.jpeg';
 import img8 from '@/assets/images/img8.jpeg';
+
+import Tile from '../Tile/Tile';
 import GameSummary from '../GameSummary/GameSummary';
-import { useState } from 'react';
 import Statistics from '../Statistics/Statistics';
-import { useNavigate } from 'react-router-dom';
-import Confetti from 'react-confetti';
-import { loadGameHistory } from '../../utils/localStorage';
 
 const easyTiles = [img1, img2, img3, img4];
 const mediumTiles = [img1, img2, img3, img4, img5, img6];
@@ -27,6 +31,12 @@ const Board: React.FC = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const navigate = useNavigate();
     const gameHistory = loadGameHistory();
+
+    useEffect(() => {
+        resetGame([], 'easy');
+        setGameStarted(false);
+        setSelectedDifficulty('easy');
+    }, [resetGame]);
 
     const handleDifficultyChange = (level: 'easy' | 'medium' | 'hard') => {
         if (tiles.length > 0 && !isGameOver) return;
@@ -112,7 +122,7 @@ const Board: React.FC = () => {
                 ))}
             </div>
             {isGameOver && <GameSummary />}
-            {!!gameHistory.length && <button onClick={() => navigate('/history')}>Check Game History</button>}
+            {!!gameHistory.length && isGameOver && <button onClick={() => navigate('/history')}>Check Game History</button>}
 
         </>
     );
