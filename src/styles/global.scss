@@ -43,10 +43,10 @@ body {
             background-color: $deep-purple;
         }
         &:disabled {
-            background-color: #cfcfcf; /* Szary kolor na zablokowany przycisk */
-            color: #999; /* Jasnoszary tekst */
-            transform: none; /* Brak transformacji dla zablokowanego przycisku */
-            opacity: 0.6; /* Ustawienie przezroczystości dla efektu zablokowania */
+            background-color: #cfcfcf;
+            color: #999;
+            transform: none;
+            opacity: 0.6;
         }
     }
 

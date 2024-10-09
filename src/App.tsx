@@ -11,12 +11,9 @@ const App: React.FC = () => {
     <div className="app">
       <BrowserRouter>
         <h1>Memory Card Matching Game</h1>
-
         <Routes>
-
           <Route path="/" element={<Board />} />
           <Route path="/history" element={<GameHistory />} />
-
         </Routes>
       </BrowserRouter>
     </div>

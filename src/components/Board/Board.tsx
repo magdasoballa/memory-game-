@@ -11,7 +11,7 @@ import img6 from '@/assets/images/img6.jpeg';
 import img7 from '@/assets/images/img7.jpeg';
 import img8 from '@/assets/images/img8.jpeg';
 import GameSummary from '../GameSummary/GameSummary';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Statistics from '../Statistics/Statistics';
 import { useNavigate } from 'react-router-dom';
 import Confetti from 'react-confetti';

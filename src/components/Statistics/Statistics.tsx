@@ -8,13 +8,11 @@ const Statistics: React.FC = () => {
 
     useEffect(() => {
         let timer: NodeJS.Timeout | null = null;
-
         if (startTime && !isGameOver) {
             timer = setInterval(() => {
                 setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
             }, 1000);
         }
-
         return () => {
             if (timer) {
                 clearInterval(timer);
@@ -22,10 +20,16 @@ const Statistics: React.FC = () => {
         };
     }, [startTime, isGameOver]);
 
+    const formatTime = (timeInSeconds: number) => {
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = timeInSeconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    };
+
     return (
         <div className="statistics">
             <p>Attempts: {attempts}</p>
-            <p>Elapsed Time: {elapsedTime} seconds</p>
+            <p>Elapsed Time: {formatTime(elapsedTime)}</p>
         </div>
     );
 };
