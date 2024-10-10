@@ -30,12 +30,14 @@ const Board: React.FC = () => {
     const { tiles, revealedTiles, matchedPairs, resetGame, revealTile, isGameOver, startGame, setDifficulty } = useGameStore();
     const [selectedDifficulty, setSelectedDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
     const [gameStarted, setGameStarted] = useState(false);
+    const [gameStopped, setGameStopped] = useState(false);
     const navigate = useNavigate();
     const gameHistory = loadGameHistory();
 
     useEffect(() => {
         resetGame([], 'easy');
         setGameStarted(false);
+        setGameStopped(false);
         setSelectedDifficulty('easy');
     }, [resetGame]);
 
@@ -50,6 +52,16 @@ const Board: React.FC = () => {
         resetGame(tilesForGame, selectedDifficulty);
         startGame();
         setGameStarted(true);
+        setGameStopped(false);
+    };
+
+    const handleStopGame = () => {
+        const confirmStop = window.confirm('Are you sure you want to stop the game?');
+        if (confirmStop) {
+            setGameStopped(true);
+            setGameStarted(false);
+            resetGame([], selectedDifficulty);
+        }
     };
 
     const renderDifficultyButtons = () => {
@@ -72,12 +84,15 @@ const Board: React.FC = () => {
                 {renderDifficultyButtons()}
             </div>
 
-            {tiles.length === 0 && (
+            {!gameStarted && tiles.length === 0 && (
                 <button className='large' onClick={handleStartGame}>Start Game</button>
             )}
 
-            {tiles.length > 0 && !isGameOver && (
-                <button className='large' onClick={handleStartGame}>Reset Game</button>
+            {gameStarted && tiles.length > 0 && !isGameOver && (
+                <>
+                    <button className='large' onClick={handleStopGame}>Stop Game</button>
+                    <button className='large' onClick={handleStartGame}>Reset Game</button>
+                </>
             )}
 
             {isGameOver && (
@@ -86,20 +101,26 @@ const Board: React.FC = () => {
 
             {gameStarted && !isGameOver && <Statistics />}
 
-            <div className={`board ${isGameOver ? 'game-over' : ''}`}>
-                {tiles.map((tile, index) => (
-                    <Tile
-                        key={index}
-                        index={index}
-                        image={tile}
-                        isRevealed={revealedTiles.includes(index)}
-                        isMatched={matchedPairs.some(pair => pair.includes(index))}
-                        onClick={() => revealTile(index)}
-                    />
-                ))}
-            </div>
+            {gameStarted && !gameStopped && (
+                <div className={`board ${isGameOver ? 'game-over' : ''}`}>
+                    {tiles.map((tile, index) => (
+                        <Tile
+                            key={index}
+                            index={index}
+                            image={tile}
+                            isRevealed={revealedTiles.includes(index)}
+                            isMatched={matchedPairs.some(pair => pair.includes(index))}
+                            onClick={() => revealTile(index)}
+                        />
+                    ))}
+                </div>
+            )}
+
             {isGameOver && <GameSummary />}
-            {!!gameHistory.length && isGameOver && <button onClick={() => navigate('/history')}>Check Game History</button>}
+
+            {!!gameHistory.length && isGameOver && (
+                <button onClick={() => navigate('/history')}>Check Game History</button>
+            )}
         </div>
     );
 };
