@@ -6,6 +6,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import './GameHistory.scss';
 
 import { loadGameHistory } from '@/utils/localStorage';
+import { formatDuration } from '@/utils/formatDuration';
 
 const GameHistory: React.FC = () => {
     const [history, setHistory] = useState<{ attempts: number; duration: number; date: string }[]>([]);
@@ -15,13 +16,7 @@ const GameHistory: React.FC = () => {
         setHistory(gameHistory);
     }, []);
 
-    const formatDuration = (seconds: number) => {
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        const formattedSecs = secs < 10 ? `0${secs}` : secs;
 
-        return `${minutes}m ${formattedSecs}s`;
-    };
 
     return (
         <div className="game-history">

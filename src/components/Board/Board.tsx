@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Confetti from 'react-confetti';
-
 import './Board.scss';
 
 import { useGameStore } from '@/store/useGameStore';
@@ -21,9 +20,11 @@ import Tile from '../Tile/Tile';
 import GameSummary from '../GameSummary/GameSummary';
 import Statistics from '../Statistics/Statistics';
 
-const easyTiles = [img1, img2, img3, img4];
-const mediumTiles = [img1, img2, img3, img4, img5, img6];
-const hardTiles = [img1, img2, img3, img4, img5, img6, img7, img8];
+const tileSets = {
+    easy: [img1, img2, img3, img4],
+    medium: [img1, img2, img3, img4, img5, img6],
+    hard: [img1, img2, img3, img4, img5, img6, img7, img8],
+};
 
 const Board: React.FC = () => {
     const { tiles, revealedTiles, matchedPairs, resetGame, revealTile, isGameOver, startGame, setDifficulty } = useGameStore();
@@ -45,54 +46,30 @@ const Board: React.FC = () => {
     };
 
     const handleStartGame = () => {
-        let tilesForGame: string[] = [];
-        switch (selectedDifficulty) {
-            case 'easy':
-                tilesForGame = shuffleArray([...easyTiles, ...easyTiles]);
-                break;
-            case 'medium':
-                tilesForGame = shuffleArray([...mediumTiles, ...mediumTiles]);
-                break;
-            case 'hard':
-                tilesForGame = shuffleArray([...hardTiles, ...hardTiles]);
-                break;
-            default:
-                tilesForGame = shuffleArray([...easyTiles, ...easyTiles]);
-        }
+        const tilesForGame = shuffleArray([...tileSets[selectedDifficulty], ...tileSets[selectedDifficulty]]);
         resetGame(tilesForGame, selectedDifficulty);
         startGame();
         setGameStarted(true);
     };
 
-    const handleResetGame = () => {
-        handleStartGame();
+    const renderDifficultyButtons = () => {
+        return Object.keys(tileSets).map(level => (
+            <button
+                key={level}
+                onClick={() => handleDifficultyChange(level as 'easy' | 'medium' | 'hard')}
+                className={`small ${selectedDifficulty === level ? 'selected' : ''}`}
+                disabled={selectedDifficulty !== level && tiles.length > 0 && !isGameOver}
+            >
+                {level.charAt(0).toUpperCase() + level.slice(1)}
+            </button>
+        ));
     };
 
     return (
-        <>
+        <div className="board-container">
             {isGameOver && <Confetti />}
             <div className='button-container'>
-                <button
-                    onClick={() => handleDifficultyChange('easy')}
-                    className={`small ${selectedDifficulty === 'easy' ? 'selected' : ''}`}
-                    disabled={selectedDifficulty !== 'easy' && tiles.length > 0 && !isGameOver}
-                >
-                    Easy
-                </button>
-                <button
-                    onClick={() => handleDifficultyChange('medium')}
-                    className={`small ${selectedDifficulty === 'medium' ? 'selected' : ''}`}
-                    disabled={selectedDifficulty !== 'medium' && tiles.length > 0 && !isGameOver}
-                >
-                    Medium
-                </button>
-                <button
-                    onClick={() => handleDifficultyChange('hard')}
-                    className={`small ${selectedDifficulty === 'hard' ? 'selected' : ''}`}
-                    disabled={selectedDifficulty !== 'hard' && tiles.length > 0 && !isGameOver}
-                >
-                    Hard
-                </button>
+                {renderDifficultyButtons()}
             </div>
 
             {tiles.length === 0 && (
@@ -100,7 +77,7 @@ const Board: React.FC = () => {
             )}
 
             {tiles.length > 0 && !isGameOver && (
-                <button className='large' onClick={handleResetGame}>Reset Game</button>
+                <button className='large' onClick={handleStartGame}>Reset Game</button>
             )}
 
             {isGameOver && (
@@ -123,8 +100,7 @@ const Board: React.FC = () => {
             </div>
             {isGameOver && <GameSummary />}
             {!!gameHistory.length && isGameOver && <button onClick={() => navigate('/history')}>Check Game History</button>}
-
-        </>
+        </div>
     );
 };
 
